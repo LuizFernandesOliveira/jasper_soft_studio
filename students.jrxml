@@ -8,7 +8,14 @@
 	<parameter name="STUDENT_ID" class="java.lang.Integer"/>
 	<parameter name="CLASS_ID" class="java.lang.Integer"/>
 	<queryString language="SQL">
-		<![CDATA[select a.* from aluno a
+		<![CDATA[select a.*, 
+(
+	select d.nome 
+	from turma t
+	join disciplina d on d.disciplina_id = t.disciplina_id
+	where t.turma_id = $P{CLASS_ID}
+) as nome_disciplina
+from aluno a
 where (
 	$P{STUDENT_ID} is null or a.aluno_id =  $P{STUDENT_ID}
 )
@@ -16,8 +23,7 @@ and ($P{CLASS_ID} is null or exists (
 	select 1 from aluno_turma at
 		where at.turma_id = $P{CLASS_ID}
 	)
-)
-]]>
+)]]>
 	</queryString>
 	<field name="aluno_id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="aluno_id"/>
@@ -79,20 +85,30 @@ and ($P{CLASS_ID} is null or exists (
 		<property name="com.jaspersoft.studio.field.label" value="descricao"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
 	</field>
+	<field name="nome_disciplina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome_disciplina"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_disciplina"/>
+	</field>
 	<variable name="gender" class="java.lang.String">
 		<variableExpression><![CDATA[$F{sexo} =="M" ? "Masculino" : "Feminino"]]></variableExpression>
+	</variable>
+	<variable name="aluno_id1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{aluno_id}]]></variableExpression>
+	</variable>
+	<variable name="age" class="java.lang.Integer">
+		<variableExpression><![CDATA[java.time.Period.between($F{data_nascimento}.toLocalDate(), java.time.LocalDate.now()).getYears()]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
-		<band height="52" splitType="Stretch">
+		<band height="67" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="180" height="50" uuid="cca2a730-2c75-4bd0-b0e3-7250f8f8bae8"/>
 				<imageExpression><![CDATA["logo_empresa.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="185" y="1" width="370" height="51" uuid="a87cc187-6465-4808-af79-86812c9bcdc6">
+				<reportElement x="185" y="1" width="370" height="29" uuid="a87cc187-6465-4808-af79-86812c9bcdc6">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -100,6 +116,13 @@ and ($P{CLASS_ID} is null or exists (
 				</textElement>
 				<text><![CDATA[Relatório de Alunos da Escola]]></text>
 			</staticText>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="185" y="30" width="370" height="20" uuid="6d2b828b-8f1e-4acc-a061-b80bf018a239"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA["<b>Turma: </b>" + ($F{nome_disciplina} != null ?  $F{nome_disciplina} :  "todas") + 
+($P{STUDENT_ID} != null ? "<br /><b>Filtrando pelo aluno: </b>" +  $F{nome} : "")
+]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -132,7 +155,7 @@ and ($P{CLASS_ID} is null or exists (
 				<text><![CDATA[Data de Nascimento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="369" y="0" width="111" height="20" backcolor="#E6E6E6" uuid="1298c277-d243-4f02-959c-5ae5e2cbd183">
+				<reportElement mode="Opaque" x="369" y="0" width="101" height="20" backcolor="#E6E6E6" uuid="1298c277-d243-4f02-959c-5ae5e2cbd183">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c9b24413-4367-45ca-bcc8-e4543f157293"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -141,13 +164,22 @@ and ($P{CLASS_ID} is null or exists (
 				<text><![CDATA[Cidade]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="480" y="0" width="75" height="20" backcolor="#E6E6E6" uuid="432c75a7-b474-40d3-95ee-d82c36b63783">
+				<reportElement mode="Opaque" x="470" y="0" width="50" height="20" backcolor="#E6E6E6" uuid="432c75a7-b474-40d3-95ee-d82c36b63783">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="520" y="0" width="35" height="20" backcolor="#E6E6E6" uuid="389db3bf-7d85-4c61-86ca-764d23294856">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Idade]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -174,19 +206,26 @@ and ($P{CLASS_ID} is null or exists (
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{data_nascimento}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="369" y="0" width="111" height="20" uuid="17080882-7718-4a58-a269-96e55c64b2c4">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="369" y="0" width="101" height="20" uuid="17080882-7718-4a58-a269-96e55c64b2c4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c9b24413-4367-45ca-bcc8-e4543f157293"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
 			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="470" y="0" width="50" height="20" uuid="4f9267a2-6a51-44b7-afdf-8281ab662809">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="styled"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
 			<textField>
-				<reportElement x="480" y="0" width="75" height="20" uuid="4f9267a2-6a51-44b7-afdf-8281ab662809">
+				<reportElement x="520" y="0" width="35" height="20" uuid="a1f74421-88c3-449c-8f83-54a22bbe021f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{age}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -208,4 +247,13 @@ and ($P{CLASS_ID} is null or exists (
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="57">
+			<textField>
+				<reportElement x="0" y="0" width="187" height="40" uuid="d16ae571-33a2-4bf9-b8c5-4b3c45cc8997"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA["<b>Total de Alunos: </b>" + $V{aluno_id1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>
