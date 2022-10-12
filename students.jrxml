@@ -5,6 +5,20 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Postgres school"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="353"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="636"/>
+	<style name="ColorGender">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sexo}.equals("M")]]></conditionExpression>
+			<style forecolor="#1C780C" markup="styled" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sexo}.equals("F")]]></conditionExpression>
+			<style forecolor="#B51714" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sexo}.equals("X")]]></conditionExpression>
+			<style forecolor="#F2CB1B" isBold="true"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="STUDENT_ID" class="java.lang.Integer"/>
 	<parameter name="CLASS_ID" class="java.lang.Integer"/>
 	<queryString language="SQL">
@@ -195,7 +209,7 @@ and ($P{CLASS_ID} is null or exists (
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="70" height="20" uuid="8d256a0d-fed5-404a-aec2-a53b6a05de85">
+				<reportElement style="ColorGender" x="200" y="0" width="70" height="20" uuid="8d256a0d-fed5-404a-aec2-a53b6a05de85">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f6816eed-4619-4bf1-8d86-a0bf68788c6b"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
