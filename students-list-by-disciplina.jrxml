@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="students" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="949cae3c-a8ef-4bad-a62e-58d9ada32719">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Postgres school"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="353"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="636"/>
+	<style name="ColorGender">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sexo}.equals("M")]]></conditionExpression>
+			<style forecolor="#1C780C" markup="styled" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sexo}.equals("F")]]></conditionExpression>
+			<style forecolor="#B51714" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{sexo}.equals("X")]]></conditionExpression>
+			<style forecolor="#F2CB1B" isBold="true"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="Class of Students" uuid="a4fe46da-b810-452a-81b7-52f9483d20aa">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Postgres school"/>
+		<parameter name="STUDENT_ID" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[select d.nome, t.data_inicio, t.data_fim, at.nota, at.qtd_faltas
+from disciplina d
+join turma t on t.disciplina_id = d.disciplina_id
+join aluno_turma at on at.turma_id = t.turma_id
+where at.aluno_id = $P{STUDENT_ID} ]]>
+		</queryString>
+		<field name="nome" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nome"/>
+			<property name="com.jaspersoft.studio.field.label" value="nome"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="disciplina"/>
+		</field>
+		<field name="data_inicio" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="data_inicio"/>
+			<property name="com.jaspersoft.studio.field.label" value="data_inicio"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="turma"/>
+		</field>
+		<field name="data_fim" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="data_fim"/>
+			<property name="com.jaspersoft.studio.field.label" value="data_fim"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="turma"/>
+		</field>
+		<field name="nota" class="java.lang.Double">
+			<property name="com.jaspersoft.studio.field.name" value="nota"/>
+			<property name="com.jaspersoft.studio.field.label" value="nota"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="aluno_turma"/>
+		</field>
+		<field name="qtd_faltas" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="qtd_faltas"/>
+			<property name="com.jaspersoft.studio.field.label" value="qtd_faltas"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="aluno_turma"/>
+		</field>
+		<variable name="average_student" class="java.lang.Double" calculation="Average">
+			<variableExpression><![CDATA[$F{nota}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="STUDENT_ID" class="java.lang.Integer"/>
+	<parameter name="CLASS_ID" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[select a.*, 
+(
+	select d.nome 
+	from turma t
+	join disciplina d on d.disciplina_id = t.disciplina_id
+	where t.turma_id = $P{CLASS_ID}
+) as nome_disciplina
+from aluno a
+where (
+	$P{STUDENT_ID} is null or a.aluno_id =  $P{STUDENT_ID}
+)
+and ($P{CLASS_ID} is null or exists (
+	select 1 from aluno_turma at
+		where at.turma_id = $P{CLASS_ID}
+	)
+)
+order by estado asc]]>
+	</queryString>
+	<field name="aluno_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="aluno_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="aluno_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="sexo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="sexo"/>
+		<property name="com.jaspersoft.studio.field.label" value="sexo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="data_nascimento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="data_nascimento"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_nascimento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="avatar" class="byte[]">
+		<property name="com.jaspersoft.studio.field.name" value="avatar"/>
+		<property name="com.jaspersoft.studio.field.label" value="avatar"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="endereco" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="endereco"/>
+		<property name="com.jaspersoft.studio.field.label" value="endereco"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="numero_endereco" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="numero_endereco"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_endereco"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="cep" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cep"/>
+		<property name="com.jaspersoft.studio.field.label" value="cep"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="bairro" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bairro"/>
+		<property name="com.jaspersoft.studio.field.label" value="bairro"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="cidade" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cidade"/>
+		<property name="com.jaspersoft.studio.field.label" value="cidade"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descricao"/>
+		<property name="com.jaspersoft.studio.field.label" value="descricao"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="aluno"/>
+	</field>
+	<field name="nome_disciplina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome_disciplina"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome_disciplina"/>
+	</field>
+	<variable name="gender" class="java.lang.String">
+		<variableExpression><![CDATA[$F{sexo} =="M" ? "Masculino" : "Feminino"]]></variableExpression>
+	</variable>
+	<variable name="aluno_id1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{aluno_id}]]></variableExpression>
+	</variable>
+	<variable name="age" class="java.lang.Integer">
+		<variableExpression><![CDATA[java.time.Period.between($F{data_nascimento}.toLocalDate(), java.time.LocalDate.now()).getYears()]]></variableExpression>
+	</variable>
+	<variable name="average_age" class="java.lang.Integer" calculation="Average">
+		<variableExpression><![CDATA[$V{age}]]></variableExpression>
+	</variable>
+	<variable name="aluno_id2" class="java.lang.Integer" resetType="Group" resetGroup="State" calculation="Count">
+		<variableExpression><![CDATA[$F{aluno_id}]]></variableExpression>
+	</variable>
+	<variable name="average_age_state" class="java.lang.Integer" resetType="Group" resetGroup="State" calculation="Average">
+		<variableExpression><![CDATA[$V{age}]]></variableExpression>
+	</variable>
+	<variable name="average_studante" class="java.lang.Double" incrementType="Column"/>
+	<group name="State">
+		<groupExpression><![CDATA[$F{estado}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField textAdjust="StretchHeight">
+					<reportElement x="0" y="0" width="555" height="20" uuid="4f9267a2-6a51-44b7-afdf-8281ab662809">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.25"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="1.0" lineColor="#706B6B"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle" markup="html"/>
+					<textFieldExpression><![CDATA["<b>Estado: </b>" + $F{estado}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<textField>
+					<reportElement x="0" y="0" width="250" height="30" uuid="667dd2a7-8fae-4bd6-a291-2def1f34cebb"/>
+					<textElement markup="html"/>
+					<textFieldExpression><![CDATA["<b>Total de Alunos no estado: </b>" + $V{aluno_id2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="340" y="0" width="180" height="30" uuid="6321dbb7-8937-48f1-8db8-637c0f6de287"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Média de Idades no estado: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="520" y="0" width="34" height="30" uuid="b1b4728b-d187-4da2-aa85-ecb2e268ad14"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{average_age_state}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="67" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="180" height="50" uuid="cca2a730-2c75-4bd0-b0e3-7250f8f8bae8"/>
+				<imageExpression><![CDATA["logo_empresa.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="185" y="1" width="370" height="29" uuid="a87cc187-6465-4808-af79-86812c9bcdc6">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Alunos da Escola]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="185" y="30" width="370" height="20" uuid="6d2b828b-8f1e-4acc-a061-b80bf018a239"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA["<b>Turma: </b>" + ($F{nome_disciplina} != null ?  $F{nome_disciplina} :  "todas") + 
+($P{STUDENT_ID} != null ? "<br /><b>Filtrando pelo aluno: </b>" +  $F{nome} : "")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="200" height="20" backcolor="#E6E6E6" uuid="3e45789f-7397-466f-b378-1835ee357382">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbdf28b9-c43d-4525-a1f6-1e3bcbe7b032"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="200" y="0" width="70" height="20" backcolor="#E6E6E6" uuid="21a30d88-4def-40c0-8ca3-3bce98478ef8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f6816eed-4619-4bf1-8d86-a0bf68788c6b"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="270" y="0" width="98" height="20" backcolor="#E6E6E6" uuid="18df7af0-f992-4927-beb7-1a31995d03ca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0d679f04-515f-496b-9460-2443fbb6f7ff"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de Nascimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="369" y="0" width="101" height="20" backcolor="#E6E6E6" uuid="1298c277-d243-4f02-959c-5ae5e2cbd183">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c9b24413-4367-45ca-bcc8-e4543f157293"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="520" y="0" width="35" height="20" backcolor="#E6E6E6" uuid="389db3bf-7d85-4c61-86ca-764d23294856">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Idade]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="200" height="20" uuid="963646b3-e792-4ff5-957d-3bdda6837872">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbdf28b9-c43d-4525-a1f6-1e3bcbe7b032"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="ColorGender" x="200" y="0" width="70" height="20" uuid="8d256a0d-fed5-404a-aec2-a53b6a05de85">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f6816eed-4619-4bf1-8d86-a0bf68788c6b"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{sexo}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="dd/MM/yyyy">
+				<reportElement x="270" y="0" width="98" height="20" uuid="457ae765-0ac5-4174-b643-3fd0d50dbf68">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0d679f04-515f-496b-9460-2443fbb6f7ff"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{data_nascimento}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="369" y="0" width="101" height="20" uuid="17080882-7718-4a58-a269-96e55c64b2c4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c9b24413-4367-45ca-bcc8-e4543f157293"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="35" height="20" uuid="a1f74421-88c3-449c-8f83-54a22bbe021f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b4f96b3-05f0-46c2-8c52-975d97f545e7"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{age}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="40">
+			<componentElement>
+				<reportElement x="0" y="20" width="555" height="20" uuid="acedd76f-d178-49c9-aaed-d67f3162d818"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Class of Students" uuid="7ad36382-b943-42eb-92fa-a5f275196918">
+						<datasetParameter name="STUDENT_ID">
+							<datasetParameterExpression><![CDATA[$F{aluno_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						<returnValue fromVariable="average_student" toVariable="average_studante"/>
+					</datasetRun>
+					<jr:listContents height="20" width="555">
+						<textField>
+							<reportElement x="0" y="0" width="150" height="20" uuid="f1e14f97-dff2-4f84-a013-b3e4288ca488"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+						</textField>
+						<textField pattern="dd/MM/yyyy">
+							<reportElement x="150" y="0" width="100" height="20" uuid="351be00f-9df5-477e-8c56-48f5b9b91c2b"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{data_inicio}]]></textFieldExpression>
+						</textField>
+						<textField pattern="dd/MM/yyyy">
+							<reportElement x="250" y="0" width="100" height="20" uuid="497f4cc0-ea76-4654-851d-0c7639718e60"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{data_fim}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="350" y="0" width="100" height="20" uuid="b6b8037f-dd0b-469f-bfae-0868afd24adf"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{nota}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="450" y="0" width="105" height="20" uuid="230d8ee4-ee8d-4f90-b518-2b34fe26ed39"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{qtd_faltas}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement x="0" y="0" width="150" height="20" forecolor="#474343" uuid="1611e42c-855f-448c-9a18-021100573f6b"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#807979"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Disciplina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="0" width="100" height="20" forecolor="#474343" uuid="2717eae1-304f-4307-9c69-0e43ddf4566e"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#807979"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Início]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="0" width="100" height="20" forecolor="#474343" uuid="4853bda4-8779-4b7f-99fc-5f2fcfeaad1f"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#807979"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Fim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="100" height="20" forecolor="#474343" uuid="adb1f322-a505-4fd9-bcb2-8f71f5105dee"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#807979"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="105" height="20" forecolor="#474343" uuid="db7965bf-52b3-438b-aa2a-a945eeda1b2c"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#807979"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Qtd. Faltas]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<textField pattern="#,##0.00;#,##0.00">
+				<reportElement x="490" y="0" width="64" height="20" uuid="bb49211d-35c8-4ecb-bcfc-1830e709aaa0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA[$V{average_studante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="100" height="20" uuid="26a4f7a5-2122-46b9-8377-7983e181a961"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Média de Notas: "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="360" height="30" uuid="83a67e5f-b5fd-46da-a149-87df0d631239"/>
+				<text><![CDATA[Minha empresa. Todos os diretos reservados]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="360" y="0" width="94" height="30" uuid="1e711f3d-9a9c-4f56-a88a-53efc5a95bb4"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="455" y="0" width="100" height="30" uuid="5ee9fd62-221e-4cf6-91e7-7cf037349755"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" de " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="40">
+			<textField>
+				<reportElement x="0" y="0" width="187" height="40" uuid="d16ae571-33a2-4bf9-b8c5-4b3c45cc8997"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA["<b>Total de Alunos: </b>" + $V{aluno_id1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="34" height="30" uuid="119a3d8a-59b1-48ee-9ded-1b9cc31e2af8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{average_age}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="374" y="0" width="146" height="30" uuid="8fa2311c-996d-4a02-b37f-3cb2c5ea1a56"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Média de Idades: ]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
