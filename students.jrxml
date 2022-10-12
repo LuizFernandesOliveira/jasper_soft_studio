@@ -98,6 +98,9 @@ and ($P{CLASS_ID} is null or exists (
 	<variable name="age" class="java.lang.Integer">
 		<variableExpression><![CDATA[java.time.Period.between($F{data_nascimento}.toLocalDate(), java.time.LocalDate.now()).getYears()]]></variableExpression>
 	</variable>
+	<variable name="average_age" class="java.lang.Integer" calculation="Average">
+		<variableExpression><![CDATA[$V{age}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -120,8 +123,7 @@ and ($P{CLASS_ID} is null or exists (
 				<reportElement x="185" y="30" width="370" height="20" uuid="6d2b828b-8f1e-4acc-a061-b80bf018a239"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html"/>
 				<textFieldExpression><![CDATA["<b>Turma: </b>" + ($F{nome_disciplina} != null ?  $F{nome_disciplina} :  "todas") + 
-($P{STUDENT_ID} != null ? "<br /><b>Filtrando pelo aluno: </b>" +  $F{nome} : "")
-]]></textFieldExpression>
+($P{STUDENT_ID} != null ? "<br /><b>Filtrando pelo aluno: </b>" +  $F{nome} : "")]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -248,12 +250,24 @@ and ($P{CLASS_ID} is null or exists (
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="57">
+		<band height="40">
 			<textField>
 				<reportElement x="0" y="0" width="187" height="40" uuid="d16ae571-33a2-4bf9-b8c5-4b3c45cc8997"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="html"/>
 				<textFieldExpression><![CDATA["<b>Total de Alunos: </b>" + $V{aluno_id1}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="34" height="30" uuid="119a3d8a-59b1-48ee-9ded-1b9cc31e2af8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{average_age}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="374" y="0" width="146" height="30" uuid="8fa2311c-996d-4a02-b37f-3cb2c5ea1a56"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Média de Idades: ]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
