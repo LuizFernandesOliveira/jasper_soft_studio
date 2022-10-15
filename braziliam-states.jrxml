@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="braziliam-states" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d8c2e556-ddb3-4148-ba90-c05b2c8066f9">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Braziliam States"/>
+	<queryString language="json">
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="net.sf.jasperreports.json.field.expression" value="id"/>
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="sigla" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="sigla"/>
+		<fieldDescription><![CDATA[sigla]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="nome"/>
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="regiao_sigla" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="regiao.sigla"/>
+		<fieldDescription><![CDATA[regiao_sigla]]></fieldDescription>
+	</field>
+	<field name="regiao_nome" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="regiao.nome"/>
+		<fieldDescription><![CDATA[regiao_nome]]></fieldDescription>
+	</field>
+	<sortField name="nome"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="185" height="30" uuid="44451b46-c720-42aa-85e0-d307b8422b5c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="83ff2c94-8b17-4ebd-9325-75fc9b82d800"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sigla]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="0" width="185" height="30" uuid="ebacf01b-1d0d-4d45-9ad6-4357ceceef4e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ec51c89-039c-4196-ac7d-54e0a89364e0"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="185" height="30" uuid="0330b8a2-6c35-4721-9576-117439895124">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f8aaa87-a0e6-4d12-a2d7-7e6f892fcef8"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome da Região]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="185" height="20" uuid="2c8900b6-ee3d-437a-959b-341495fd5ba9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="83ff2c94-8b17-4ebd-9325-75fc9b82d800"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{sigla}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="185" y="0" width="185" height="20" uuid="b7db0dc9-5da3-4b10-babd-2894c1345bf9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ec51c89-039c-4196-ac7d-54e0a89364e0"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="185" height="20" uuid="c7e53bda-065a-4f2b-940f-a5b5438c315e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3f8aaa87-a0e6-4d12-a2d7-7e6f892fcef8"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{regiao_nome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
