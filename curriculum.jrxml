@@ -495,6 +495,16 @@ from aluno a]]>
 				</jr:table>
 			</componentElement>
 		</band>
+		<band height="200">
+			<subreport>
+				<reportElement x="-20" y="0" width="595" height="200" uuid="a910dacf-3667-4404-ae8e-8d91cdf9b53a"/>
+				<subreportParameter name="STUDENT_ID">
+					<subreportParameterExpression><![CDATA[$F{aluno_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["students-list-by-disciplina.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
 		<band height="2">
 			<break>
 				<reportElement x="0" y="1" width="98" height="1" uuid="a8dfcc83-59c8-4d5a-82b0-388a55e88fad"/>
