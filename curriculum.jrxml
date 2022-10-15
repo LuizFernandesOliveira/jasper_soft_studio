@@ -229,14 +229,21 @@ from aluno a]]>
 	<detail>
 		<band height="80" splitType="Stretch">
 			<textField>
-				<reportElement x="60" y="0" width="330" height="20" uuid="df6b98ef-b449-4e68-aa97-5bff78df0101">
+				<reportElement x="60" y="0" width="410" height="20" uuid="df6b98ef-b449-4e68-aa97-5bff78df0101">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="60" height="20" uuid="fa639931-e5f5-4fe9-af24-f9f4834ea3fd"/>
+				<reportElement mode="Opaque" x="0" y="0" width="60" height="20" forecolor="#FFFFFF" backcolor="#091647" uuid="fa639931-e5f5-4fe9-af24-f9f4834ea3fd"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -249,6 +256,9 @@ from aluno a]]>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="20" width="140" height="20" uuid="d88fe08e-a3f3-486e-9b6f-8a5e43a2c8ac"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -267,16 +277,28 @@ from aluno a]]>
 				<text><![CDATA[Sexo:]]></text>
 			</staticText>
 			<image>
-				<reportElement x="430" y="0" width="125" height="40" uuid="e3c3d27e-902b-4c30-b6b3-ea950bf75aef"/>
+				<reportElement x="470" y="0" width="85" height="60" uuid="e3c3d27e-902b-4c30-b6b3-ea950bf75aef"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<imageExpression><![CDATA[$F{avatar}]]></imageExpression>
 			</image>
 			<textField textAdjust="StretchHeight">
 				<reportElement x="0" y="60" width="555" height="20" uuid="ff016548-e504-4823-801a-72994a91c1c3"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="40" width="100" height="20" uuid="e87a076a-2506-4dfb-9b3a-60a1919bd918"/>
+				<box leftPadding="5">
+					<leftPen lineWidth="1.0"/>
+				</box>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
